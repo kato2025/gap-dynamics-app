@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forest Gap Management</title>
+  <meta name="description" content="Record, calculate, and manage forest gap measurements using scientific methods">
+  <meta name="theme-color" content="#2c5364">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Gap Manager">
+  
+  <!-- Manifest -->
+  <link rel="manifest" href="manifest.json">
+  
+  <!-- Icons -->
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="icons/icon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/icon-180x180.png">
+  <link rel="stylesheet" href="styles/main.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="styles/responsive.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Header with Menu -->
+    <div class="app-header">
+      <h1>🌳 Forest Gap Management</h1>
+      <button class="menu-btn" onclick="toggleMenu()">⋮</button>
+    </div>
+   <!-- Dropdown Menu -->
+    <div id="dropdownMenu" class="dropdown-menu">
+      <button onclick="openCSVFile()">📂 Open CSV File</button>
+      <button onclick="showUserGuide()">📖 User Guide</button>
+      <button onclick="showAboutDeveloper()">👨‍💻 About Developer</button>
+    </div>
+    <!-- Hidden file input for CSV -->
+    <input type="file" id="csvFileInput" accept=".csv" style="display: none;">
+    
+    <!-- GAP INFORMATION -->
+    <div class="card">
+      <h2>📋 Gap Information</h2>
+      <div class="input-group">
+        <label for="location" class="required">Location</label>
+        <input id="location" type="text" placeholder="Enter location name">
+      </div>
+      <div class="input-group">
+        <label for="plotNumber" class="required">Plot/Cluster/ACA Number</label>
+        <input id="plotNumber" type="text" placeholder="Enter plot number">
+      </div>
+      <div class="input-group">
+        <label for="gapNumber" class="required">Gap Number</label>
+        <input id="gapNumber" type="text" placeholder="Enter gap number">
+      </div>
+      <div class="input-group">
+        <label for="causalFactor" class="required">Causal Factor(s)</label>
+      <select id="causalFactor">
+        <option value="" disabled selected>Select causal factor</option>
+        
+        <!-- Single factors -->
+        <option value="Tree fall">Tree fall</option>
+        <option value="Branch fall">Branch fall</option>
+        <option value="Bole snap">Bole snap</option>
+        <option value="Dead standing tree">Dead standing tree</option>
+        
+        <!-- Pairs -->
+        <option value="Tree fall and Branch fall">Tree fall and Branch fall</option>
+        <option value="Tree fall and Bole snap">Tree fall and Bole snap</option>
+        <option value="Tree fall and Dead standing tree">Tree fall and Dead standing tree</option>
+        <option value="Branch fall and Bole snap">Branch fall and Bole snap</option>
+        <option value="Branch fall and Dead standing tree">Branch fall and Dead standing tree</option>
+        <option value="Bole snap and Dead standing tree">Bole snap and Dead standing tree</option>
+        
+        <!-- Triples -->
+        <option value="Tree fall, Branch fall and Bole snap">Tree fall, Branch fall and Bole snap</option>
+        <option value="Tree fall, Branch fall and Dead standing tree">Tree fall, Branch fall and Dead standing tree</option>
+        <option value="Tree fall, Bole snap and Dead standing tree">Tree fall, Bole snap and Dead standing tree</option>
+        <option value="Branch fall, Bole snap and Dead standing tree">Branch fall, Bole snap and Dead standing tree</option>
+        
+        <!-- All four -->
+        <option value="Tree fall, Branch fall, Bole snap and Dead standing tree">Tree fall, Branch fall, Bole snap and Dead standing tree</option>
+      </select>
+      </div>
+      <div class="input-group">
+        <label for="speciesInvolved">Species Involved (Separate with commas)</label>
+        <input id="speciesInvolved" type="text" placeholder="Enter species name (optional)">
+      </div>
+    </div>
+
+    <!-- METHOD SELECTION -->
+    <div id="methodSelection" class="card">
+      <h2>🔬 Select Measurement Method</h2>
+      <div class="method-grid">
+        <div id="gridMethodCard" class="method-card disabled" onclick="showGridMethod()">
+          <div class="icon">📐</div>
+          <h3>Grid–Quadrat Method</h3>
+        </div>
+        <div id="ellipseMethodCard" class="method-card disabled" onclick="showEllipseMethod()">
+          <div class="icon">⭕</div>
+          <h3>Ellipse Approximation</h3>
+        </div>
+      </div>
+    </div>
+
+    <!-- GRID METHOD -->
+    <!-- GRID METHOD -->
+    <div id="gridMethod" class="card hidden">
+      <h2>📐 Grid–Quadrat Method</h2>
+      <div class="formula">Area = Number of squares × Area of one square</div>
+      
+      <!-- Square Dimensions Section -->
+      <div style="background: #e3f2fd; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid #1976d2;">
+        <strong style="color: #1976d2; display: block; margin-bottom: 0.75rem;">📏 Calculate Square Area</strong>
+        <div class="input-group" style="margin-bottom: 0.75rem;">
+          <label for="squareSide">Length of Side (m)</label>
+          <input id="squareSide" type="number" placeholder="Enter side length" min="0" step="0.01">
+        </div>
+        <div style="background: #fff; padding: 0.75rem; border-radius: 6px; margin-bottom: 0.75rem; font-size: 0.9rem; color: #555;">
+          <strong>Formula:</strong> Area = side²
+        </div>
+        <button class="btn btn-primary" onclick="calculateSquareArea()" style="width: 100%; margin: 0;">
+          🧮 Calculate Square Area
+        </button>
+      </div>
+      
+      <!-- Gap Measurement Section -->
+      <div class="input-group">
+        <label for="numSquares">Number of Squares</label>
+        <input id="numSquares" type="number" placeholder="Enter number of squares" min="0" step="1">
+      </div>
+      <div class="input-group">
+        <label for="areaSquare">Area of One Square (m²)</label>
+        <input id="areaSquare" type="number" placeholder="Calculated area will appear here" min="0" step="0.01" readonly style="background: #f5f5f5;">
+      </div>
+      
+      <button class="btn btn-primary" onclick="calculateGrid()">Calculate Gap Size</button>
+      <button class="btn btn-secondary" onclick="back()">← Back</button>
+    </div>
+
+    <!-- ELLIPSE METHOD -->
+    <div id="ellipseMethod" class="card hidden">
+      <h2>⭕ Ellipse Approximation Method</h2>
+      <div class="formula">Area = π × Short radius × Long radius</div>
+      <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 0.75rem; margin-bottom: 1rem; border-radius: 4px; font-size: 0.9rem;">
+        <strong>⚠️ Important:</strong> The long radius must be greater than the short radius.
+      </div>
+      <div class="input-group">
+        <label for="shortRadius">Short Radius (m)</label>
+        <input id="shortRadius" type="number" placeholder="Enter short radius" min="0" step="0.01">
+      </div>
+      <div class="input-group">
+        <label for="longRadius">Long Radius (m)</label>
+        <input id="longRadius" type="number" placeholder="Enter long radius" min="0" step="0.01">
+      </div>
+      <button class="btn btn-primary" onclick="calculateEllipse()">Calculate Gap Size</button>
+      <button class="btn btn-secondary" onclick="back()">← Back</button>
+    </div>
+
+    <!-- RESULTS -->
+    <div class="card">
+      <h2>📊 Results</h2>
+      <div id="locationHeader" class="hidden" style="background: #f8f9fa; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid #2c5364;">
+        <strong style="color: #2c5364; font-size: 1.1rem;">Location:</strong>
+        <span id="locationName" style="color: #555; font-size: 1.1rem; margin-left: 0.5rem;"></span>
+      </div>
+      <div id="resultsContainer"></div>
+      <button id="exportBtn" class="btn btn-export" onclick="exportCSV()" style="margin-top: 1rem;" disabled>
+        📥 Export to CSV
+      </button>
+      <button class="btn btn-danger" onclick="showNewLocationModal()" style="margin-top: 1rem;">
+        🆕 New Location
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal for New Location Warning -->
+  <div id="newLocationModal" class="modal">
+    <div class="modal-content">
+      <h3>New Location</h3>
+      <p>Starting a new location will clear all current data. Would you like to export the existing data before clearing?</p>
+      <div class="modal-buttons">
+        <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-danger" onclick="clearDataWithoutExport()">Don't Export</button>
+        <button class="btn btn-export" onclick="exportAndClear()">Export & Clear</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for Page Refresh Warning -->
+  <div id="refreshWarningModal" class="modal">
+    <div class="modal-content">
+      <h3>Unsaved Data</h3>
+      <p>You have unsaved data. Would you like to export it before leaving?</p>
+      <div class="modal-buttons">
+        <button class="btn btn-secondary" onclick="cancelRefresh()">Cancel</button>
+        <button class="btn btn-danger" onclick="proceedWithoutExport()">Don't Export</button>
+        <button class="btn btn-export" onclick="exportAndLeave()">Export & Leave</button>
+      </div>
+    </div>
+  </div>
+
+ <!-- Modal for Edit Record -->
+  <div id="editModal" class="modal">
+    <div class="modal-content">
+      <h3>✏️ Edit Record</h3>
+      <div class="input-group">
+        <label for="editPlotNumber" class="required">Plot Number</label>
+        <input id="editPlotNumber" type="text" placeholder="Enter plot number">
+      </div>
+      <div class="input-group">
+        <label for="editGapNumber" class="required">Gap Number</label>
+        <input id="editGapNumber" type="text" placeholder="Enter gap number">
+      </div>
+      <div class="input-group">
+        <label for="editSpeciesInvolved">Species Involved</label>
+        <input id="editSpeciesInvolved" type="text" placeholder="Enter species name (optional)">
+      </div>
+      <div class="input-group">
+        <label for="editCausalFactor" class="required">Causal Factor(s)</label>
+        <select id="editCausalFactor">
+          <option value="" disabled>Select causal factor</option>
+          
+          <!-- Single factors -->
+          <option value="Tree fall">Tree fall</option>
+          <option value="Branch fall">Branch fall</option>
+          <option value="Bole snap">Bole snap</option>
+          <option value="Dead standing tree">Dead standing tree</option>
+          
+          <!-- Pairs -->
+          <option value="Tree fall and Branch fall">Tree fall and Branch fall</option>
+          <option value="Tree fall and Bole snap">Tree fall and Bole snap</option>
+          <option value="Tree fall and Dead standing tree">Tree fall and Dead standing tree</option>
+          <option value="Branch fall and Bole snap">Branch fall and Bole snap</option>
+          <option value="Branch fall and Dead standing tree">Branch fall and Dead standing tree</option>
+          <option value="Bole snap and Dead standing tree">Bole snap and Dead standing tree</option>
+          
+          <!-- Triples -->
+          <option value="Tree fall, Branch fall and Bole snap">Tree fall, Branch fall and Bole snap</option>
+          <option value="Tree fall, Branch fall and Dead standing tree">Tree fall, Branch fall and Dead standing tree</option>
+          <option value="Tree fall, Bole snap and Dead standing tree">Tree fall, Bole snap and Dead standing tree</option>
+          <option value="Branch fall, Bole snap and Dead standing tree">Branch fall, Bole snap and Dead standing tree</option>
+          
+          <!-- All four -->
+          <option value="Tree fall, Branch fall, Bole snap and Dead standing tree">Tree fall, Branch fall, Bole snap and Dead standing tree</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label for="editMethod">Method</label>
+        <input id="editMethod" type="text" disabled style="background: #f5f5f5; cursor: not-allowed;">
+      </div>
+
+      <!-- Grid Method Inputs -->
+      <div id="editGridInputs" class="hidden">
+        <div style="background: #e3f2fd; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+          <strong style="color: #1976d2;">📐 Grid–Quadrat Calculation</strong>
+        </div>
+        
+        <!-- Square Dimensions in Edit -->
+        <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid #667eea;">
+          <strong style="color: #555; display: block; margin-bottom: 0.75rem;">📏 Calculate Square Area</strong>
+          <div class="input-group" style="margin-bottom: 0.75rem;">
+            <label for="editSquareSide">Length of Side (m)</label>
+            <input id="editSquareSide" type="number" placeholder="Enter side length" min="0" step="0.01">
+          </div>
+          <div style="background: #fff; padding: 0.75rem; border-radius: 6px; margin-bottom: 0.75rem; font-size: 0.85rem; color: #555;">
+            <strong>Formula:</strong> Area = side²
+          </div>
+          <button class="btn btn-primary" onclick="calculateEditSquareArea()" style="width: 100%; margin: 0; padding: 0.6rem;">
+            🧮 Calculate Square Area
+          </button>
+        </div>
+        
+        <div class="input-group">
+          <label for="editNumSquares" class="required">Number of Squares</label>
+          <input id="editNumSquares" type="number" placeholder="Enter number of squares" min="0" step="1" oninput="recalculateArea()">
+        </div>
+        <div class="input-group">
+          <label for="editAreaSquare" class="required">Area of One Square (m²)</label>
+          <input id="editAreaSquare" type="number" placeholder="Calculated area will appear here" min="0" step="0.01" readonly style="background: #f5f5f5;" oninput="recalculateArea()">
+        </div>
+      </div>
+
+      <!-- Ellipse Method Inputs -->
+      <div id="editEllipseInputs" class="hidden">
+        <div style="background: #fff3e0; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+          <strong style="color: #f57c00;">⭕ Ellipse Approximation Calculation</strong>
+        </div>
+        <div class="input-group">
+          <label for="editShortRadius" class="required">Short Radius (m)</label>
+          <input id="editShortRadius" type="number" placeholder="Enter short radius" min="0" step="0.01" oninput="recalculateArea()">
+        </div>
+        <div class="input-group">
+          <label for="editLongRadius" class="required">Long Radius (m)</label>
+          <input id="editLongRadius" type="number" placeholder="Enter long radius" min="0" step="0.01" oninput="recalculateArea()">
+        </div>
+      </div>
+
+      <!-- Calculated Results Display -->
+      <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div>
+            <div style="font-size: 0.85rem; color: #888; font-weight: 600; margin-bottom: 0.25rem;">CALCULATED AREA</div>
+            <div style="font-size: 1.25rem; color: #2c5364; font-weight: bold;">
+              <span id="editCalculatedArea">0.00</span> m²
+            </div>
+          </div>
+          <div>
+            <div style="font-size: 0.85rem; color: #888; font-weight: 600; margin-bottom: 0.25rem;">CLASSIFICATION</div>
+            <div style="font-size: 1rem; color: #555; font-weight: 600;">
+              <span id="editCalculatedClassification">-</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-buttons">
+        <button class="btn btn-secondary" onclick="closeEditModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveEditedRecord()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/calculations.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/app.js"></script>
+
+    <!-- User Guide Modal -->
+  <div id="userGuideModal" class="modal">
+    <div class="modal-content modal-wide">
+      <div class="modal-header">
+        <h3>📖 User Guide</h3>
+        <button class="close-btn" onclick="closeUserGuide()">✕</button>
+      </div>
+      <div class="guide-content">
+        <section class="guide-section">
+          <h4>🎯 Getting Started</h4>
+          <p>The Forest Gap Management application helps you record, calculate, and manage forest gap measurements using two scientific methods.</p>
+        </section>
+
+        <section class="guide-section">
+          <h4>📋 Step 1: Enter Gap Information</h4>
+          <p>Fill in all required fields marked with an asterisk (*):</p>
+          <ul>
+            <li><strong>Location:</strong> Name of the research site or forest area</li>
+            <li><strong>Plot/Cluster/ACA Number:</strong> The plot identifier</li>
+            <li><strong>Gap Number:</strong> Unique identifier for each gap</li>
+            <li><strong>Causal Factor(s):</strong> Select the cause(s) of the gap from the dropdown menu</li>
+            <li><strong>Species Involved:</strong> Optional field for tree species</li>
+          </ul>
+          <div class="tip-box">
+            <strong>💡 Tip:</strong> All required fields must be completed before you can select a measurement method.
+          </div>
+        </section>
+
+        <section class="guide-section">
+          <h4>🔬 Step 2: Select Measurement Method</h4>
+          <p>Choose one of two calculation methods:</p>
+          
+          <div class="method-info">
+            <h5>📐 Grid–Quadrat Method</h5>
+            <p>Use this method when you've overlaid a grid on the gap area:</p>
+            <ul>
+              <li>Enter the number of squares that cover the gap</li>
+              <li>Enter the area of one square in m²</li>
+              <li>Formula: <code>Area = Number of squares × Area of one square</code></li>
+            </ul>
+          </div>
+
+          <div class="method-info">
+            <h5>⭕ Ellipse Approximation Method</h5>
+            <p>Use this method when the gap is elliptical in shape:</p>
+            <ul>
+              <li>Measure and enter the short radius (in meters)</li>
+              <li>Measure and enter the long radius (in meters)</li>
+              <li>Formula: <code>Area = π × Short radius × Long radius</code></li>
+            </ul>
+            <div class="warning-box">
+              <strong>⚠️ Important:</strong> The long radius must be greater than the short radius.
+            </div>
+          </div>
+        </section>
+
+        <section class="guide-section">
+          <h4>📊 Step 3: View Results</h4>
+          <p>After calculating, your results appear in cards showing:</p>
+          <ul>
+            <li>All gap information entered</li>
+            <li>Calculated gap size in m²</li>
+            <li><strong>Brokaw's Classification:</strong>
+              <ul>
+                <li>Small gap: &lt; 100 m²</li>
+                <li>Medium gap: 100–400 m²</li>
+                <li>Large gap: &gt; 400 m²</li>
+              </ul>
+            </li>
+          </ul>
+        </section>
+
+        <section class="guide-section">
+          <h4>✏️ Editing Records</h4>
+          <p>Click the <strong>✏️ Edit</strong> button on any result card to modify:</p>
+          <ul>
+            <li>Gap information fields</li>
+            <li>Calculation inputs (which will automatically recalculate the area)</li>
+          </ul>
+          <p>The method type cannot be changed once set.</p>
+        </section>
+
+        <section class="guide-section">
+        <h4>📥 Exporting Data</h4>
+        <p>Click <strong>📥 Export to CSV</strong> to download all results in a spreadsheet format. The file will be named after your location.</p>
+        <p>Exported files can be:</p>
+        <ul>
+          <li>Opened and edited in Excel, Google Sheets, or any spreadsheet application</li>
+          <li>Saved as backup copies of your data</li>
+          <li>Shared with colleagues or supervisors</li>
+          <li>Re-imported back into the app for continued work</li>
+        </ul>
+        </section>
+
+        <section class="guide-section">
+          <h4>📂 Importing CSV Files</h4>
+          <p>You can import previously exported CSV files back into the app:</p>
+          <ul>
+          <ol>
+            <li>Click the menu button (⋮) in the top-right corner</li>
+            <li>Select <strong>📂 Open CSV File</strong></li>
+            <li>Choose your CSV file from your device</li>
+            <li>Review the import preview showing:
+              <ul>
+                <li>File name</li>
+                <li>Number of records found</li>
+                <li>Location name (if present)</li>
+              </ul>
+            </li>
+            <li>Choose your import option:
+              <ul>
+                <li><strong>Import:</strong> Adds new records to existing data</li>
+                <li><strong>Replace Current Data:</strong> Clears existing records and imports the CSV data</li>
+                <li><strong>Cancel:</strong> Cancels the import operation</li>
+              </ul>
+            </li>
+          </ol>
+          </ul>
+          <div class="tip-box">
+            <strong>💡 Tip:</strong> The imported location is editable. You can modify it before adding new records if needed.
+          </div>
+          <div class="warning-box">
+            <strong>⚠️ Important:</strong> Only import CSV files that were exported from this app or follow the exact same format. The app expects specific columns: ID, Plot, Gap, Species Involved, Causal factor(s), Method, Gap Size (m²), and Brokaw's Classification.
+          </div>
+        </section>
+
+        <section class="guide-section">
+          <h4>🆕 Starting a New Location</h4>
+          <p>Click <strong>🆕 New Location</strong> to start fresh. You'll be prompted to export existing data first if you haven't already.</p>
+        </section>
+
+        <section class="guide-section">
+          <h4>🗑️ Deleting Records</h4>
+          <p>Click the <strong>🗑️ Delete</strong> button on any result card to remove it. Record IDs will automatically renumber to maintain sequence.</p>
+        </section>
+
+        <section class="guide-section">
+          <h4>💾 Data Safety</h4>
+          <ul>
+            <li>The app warns you before closing or refreshing if you have unsaved data</li>
+            <li>Always export your data before starting a new location</li>
+            <li>Data is stored only in your browser session and will be lost if not exported</li>
+          </ul>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <!-- About Developer Modal -->
+  <div id="aboutDeveloperModal" class="modal">
+    <div class="modal-content modal-wide">
+      <div class="modal-header">
+        <h3>👨‍💻 About the Developer</h3>
+        <button class="close-btn" onclick="closeAboutDeveloper()">✕</button>
+      </div>
+      <div class="about-content">
+        <div class="developer-profile">
+          <img src="drnamuene.jpg" alt="Dr. Kato Samuel Namuene" class="developer-photo">
+          <h4>Dr. Kato Samuel Namuene</h4>
+          <p class="developer-subtitle">Forest Informatics & Forest Biometry</p>
+          <p class="developer-email">📧 <a href="mailto:kato.namuene@ubuea.cm">kato.namuene@ubuea.cm</a></p>
+          <p class="developer-email">
+            📧 <a href="https://www.linkedin.com/in/dr-kato-samuel-namuene-0b808a34" target="_blank" rel="noopener noreferrer">
+              LinkedIn
+            </a>
+          </p>
+        </div>
+
+        <div class="about-section">
+          <h5>🌟 Overview</h5>
+          <p>Dr. Kato Samuel Namuene is a Bakwerian from Bokwai Village, Buea, married with 3 kids. He is a lecturer and environmental educator with over 20 years of experience teaching and training in forestry, botany, information and communication technologies (ICTs), and environmental management. His career combines academic teaching, vocational skills development, and software innovation to support forest conservation, biodiversity conservation, and sustainable resource use.</p>
+        </div>
+
+        <div class="about-section">
+          <h5>🎓 Academic Qualifications</h5>
+          <ul>
+            <li><strong>Ph.D. in Botany (Forest Informatics)</strong> - University of Buea
+              <ul>
+                <li>ITTO-funded doctoral research on decision support systems and traceability software for timber exploitation monitoring</li>
+              </ul>
+            </li>
+            <li><strong>M.Sc. in Botany</strong></li>
+            <li><strong>B.Sc. (Hons.) in Plant Biology</strong></li>
+          </ul>
+        </div>
+
+        <div class="about-section">
+          <h5>📚 Professional Training</h5>
+          <ul>
+            <li><strong>Competence-Based Approach in Teaching</strong> - Ministry of Employment and Vocational Training (curriculum design, syllabus implementation, student evaluation)</li>
+            <li><strong>Rural Agriculture Training</strong> - Ministry of Agriculture and Rural Development and Ministry of Livestock, Fisheries and Animal Industries</li>
+            <li><strong>Education for Sustainable Development (ESD)</strong> - WWF Seminar</li>
+            <li><strong>International Computer Driving License (ICDL)</strong> - 2007</li>
+          </ul>
+        </div>
+
+        <div class="about-section">
+          <h5>💻 Advanced Professional Development</h5>
+          <ul>
+            <li><strong>Data Analysis with R Statistics</strong> - DataCamp (2017)</li>
+            <li><strong>Relational Databases and SQL</strong> - Stanford University Online (2022)</li>
+            <li><strong>Python Programming</strong> - Great Learning Academy (2023–2025)</li>
+            <li><strong>Oracle SQL</strong> - Great Learning Academy (2023–2025)</li>
+            <li><strong>Web App and Database Development</strong> - The Odin Project (2023–2025)</li>
+          </ul>
+        </div>
+
+        <div class="about-section">
+          <h5>🏢 Professional Experience</h5>
+          <ul>
+            <li><strong>Programme for the Sustainable Management of Natural Resources (PSMNR)</strong>
+              <ul>
+                <li>Over a decade of training staff and community members in GIS, database management, AutoCAD, file management, and ICT skills</li>
+              </ul>
+            </li>
+            <li><strong>WWF MOOC Developer</strong>
+              <ul>
+                <li>Developed and taught courses on innovations in technology for biodiversity conservation and ICT for green economy transformation</li>
+              </ul>
+            </li>
+            <li><strong>Intensive Vocational Training Centre (IVTC) Buea</strong>
+              <ul>
+                <li>12 years developing curricula in Microsoft Office, computer maintenance, and networking</li>
+                <li>Served as head of exams, jury member, and board member</li>
+              </ul>
+            </li>
+            <li><strong>Cameroon GCE Board</strong>
+              <ul>
+                <li>Resource person for syllabus development in advanced-level wood processing and forest management (since 2022)</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+
+        <div class="about-section">
+          <h5>🌍 Contributions to Conservation</h5>
+          <p>Dr. Namuene has made significant contributions to Education for Sustainable Development (ESD) through presentations on innovations in biodiversity conservation and ICT for a green economy. His work bridges the gap between technology and environmental conservation, creating practical tools and training programs that empower communities and organizations in sustainable resource management.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CSV Import Confirmation Modal -->
+  <div id="csvImportModal" class="modal">
+    <div class="modal-content">
+      <h3>Import CSV File</h3>
+      <p id="csvImportMessage"></p>
+      <div id="csvPreview" style="max-height: 200px; overflow-y: auto; background: #f8f9fa; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; display: none;">
+        <strong>Preview:</strong>
+        <div id="csvPreviewContent" style="margin-top: 0.5rem; font-size: 0.9rem;"></div>
+      </div>
+      <div class="modal-buttons">
+        <button class="btn btn-secondary" onclick="cancelCSVImport()">Cancel</button>
+        <button class="btn btn-danger" onclick="importCSVReplace()" id="replaceBtn" style="display: none;">Replace Current Data</button>
+        <button class="btn btn-primary" onclick="confirmCSVImport()">Import</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PWA Installation Script -->
+  <script>
+    // Register Service Worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./service-worker.js')
+          .then(registration => {
+            console.log('Service Worker registered successfully:', registration.scope);
+          })
+          .catch(error => {
+            console.log('Service Worker registration failed:', error);
+          });
+      });
+    }
+
+    // PWA Install Prompt
+    let deferredPrompt;
+    const installButton = document.createElement('button');
+    installButton.id = 'installButton';
+    installButton.className = 'install-button';
+    installButton.innerHTML = '📥 Install App';
+    installButton.style.display = 'none';
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installButton.style.display = 'flex';
+    });
+
+    installButton.addEventListener('click', async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        console.log(`User response: ${outcome}`);
+        deferredPrompt = null;
+        installButton.style.display = 'none';
+      }
+    });
+
+    window.addEventListener('appinstalled', () => {
+      console.log('App installed successfully');
+      installButton.style.display = 'none';
+    });
+
+    // Add install button to page
+    window.addEventListener('load', () => {
+      document.body.appendChild(installButton);
+    });
+  </script>
+</body>
+</html>
