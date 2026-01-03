@@ -1,4 +1,4 @@
-const CACHE_NAME = 'forest-gap-v1.2.0';
+const CACHE_NAME = 'forest-gap-v1.4.0';
 const urlsToCache = [
   './',
   './index.html',
@@ -8,6 +8,7 @@ const urlsToCache = [
   './styles/main.css',
   './styles/components.css',
   './styles/responsive.css',
+  './styles/print.css',
   './manifest.json',
   './drnamuene.jpg'
 ];

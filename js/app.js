@@ -139,3 +139,5 @@ window.showCSVImportModal = showCSVImportModal;
 window.cancelCSVImport = cancelCSVImport;
 window.confirmCSVImport = confirmCSVImport;
 window.importCSVReplace = importCSVReplace;
+window.printResults = printResults;
+window.createPrintTable = createPrintTable;

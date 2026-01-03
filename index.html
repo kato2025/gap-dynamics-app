@@ -21,6 +21,7 @@
   <link rel="stylesheet" href="styles/main.css">
   <link rel="stylesheet" href="styles/components.css">
   <link rel="stylesheet" href="styles/responsive.css">
+  <link rel="stylesheet" href="styles/print.css">
 </head>
 <body>
   <div class="container">
@@ -34,6 +35,7 @@
       <button onclick="openCSVFile()">📂 Open CSV File</button>
       <button onclick="showUserGuide()">📖 User Guide</button>
       <button onclick="showAboutDeveloper()">👨‍💻 About Developer</button>
+      <button onclick="printResults()">🖨️ Print Results</button>
     </div>
     <!-- Hidden file input for CSV -->
     <input type="file" id="csvFileInput" accept=".csv" style="display: none;">
@@ -104,7 +106,6 @@
     </div>
 
     <!-- GRID METHOD -->
-    <!-- GRID METHOD -->
     <div id="gridMethod" class="card hidden">
       <h2>📐 Grid–Quadrat Method</h2>
       <div class="formula">Area = Number of squares × Area of one square</div>
@@ -159,6 +160,39 @@
 
     <!-- RESULTS -->
     <div class="card">
+      <!--Print Section-->
+       <div class="card">
+      <!-- Print Header (hidden on screen, visible on print) -->
+      <div class="print-header" style="display: none;">
+        <h1>🌳 Forest Gap Management Report</h1>
+        <div class="print-location" id="printLocation"></div>
+        <div class="print-date" id="printDate"></div>
+      </div>
+
+      <!-- Print Summary (hidden on screen, visible on print) -->
+      <div class="print-summary" style="display: none;">
+        <h3>Summary Statistics</h3>
+        <table>
+          <tr>
+            <th>Total Gaps Recorded</th>
+            <td id="printTotalGaps">0</td>
+          </tr>
+          <tr>
+            <th>Small Gaps (&lt;100 m²)</th>
+            <td id="printSmallGaps">0</td>
+          </tr>
+          <tr>
+            <th>Medium Gaps (100-400 m²)</th>
+            <td id="printMediumGaps">0</td>
+          </tr>
+          <tr>
+            <th>Large Gaps (&gt;400 m²)</th>
+            <td id="printLargeGaps">0</td>
+          </tr>
+        </table>
+        <br>
+        <h3>Gap Details</h3>
+      </div>
       <h2>📊 Results</h2>
       <div id="locationHeader" class="hidden" style="background: #f8f9fa; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid #2c5364;">
         <strong style="color: #2c5364; font-size: 1.1rem;">Location:</strong>
@@ -172,6 +206,13 @@
         🆕 New Location
       </button>
     </div>
+    <!-- Print Footer (hidden on screen, visible on print) -->
+    <div class="print-footer" style="display: none;">
+    <p><strong>Developed by:</strong> Dr. Kato Samuel Namuene</p>
+    <p>University of Buea, Department of Forestry and Wildlife</p>
+    <p>Email: kato.namuene@ubuea.cm</p>
+    <p>Page printed on: <span id="printTimestamp"></span></p>
+  </div>
   </div>
 
   <!-- Modal for New Location Warning -->
@@ -359,20 +400,23 @@
           
           <div class="method-info">
             <h5>📐 Grid–Quadrat Method</h5>
-            <p>Use this method when you've overlaid a grid on the gap area:</p>
+            <p>To Use this method, overlay a grid of squares to fill the gap area:</p>
             <ul>
-              <li>Enter the number of squares that cover the gap</li>
-              <li>Enter the area of one square in m²</li>
+              <li>Measure the length of the side of one square in m</li>
+              <li>Click the 🧮 Calculate Square Area button to calculate square area in m²</li>
+              <li>Count then enter the number of squares that filled the gap</li>
+              <li>Click the Calculate Gap Size button to calculate gap size in m²</li>
               <li>Formula: <code>Area = Number of squares × Area of one square</code></li>
             </ul>
           </div>
 
           <div class="method-info">
             <h5>⭕ Ellipse Approximation Method</h5>
-            <p>Use this method when the gap is elliptical in shape:</p>
+            <p>To use this method:</p>
             <ul>
               <li>Measure and enter the short radius (in meters)</li>
               <li>Measure and enter the long radius (in meters)</li>
+              <li>Click the Calculate Gap Size button to calculate gap size in m²</li>
               <li>Formula: <code>Area = π × Short radius × Long radius</code></li>
             </ul>
             <div class="warning-box">
@@ -468,6 +512,33 @@
             <li>Always export your data before starting a new location</li>
             <li>Data is stored only in your browser session and will be lost if not exported</li>
           </ul>
+        </section>
+        <section class="guide-section">
+        <h4>🖨️ Printing Results</h4>
+        <p>Generate a professional printed report of your gap measurements:</p>
+        <ul>
+          <ol>
+            <li>Click the menu button (⋮) in the top-right corner</li>
+            <li>Select <strong>🖨️ Print Results</strong></li>
+            <li>Review the print preview showing:
+              <ul>
+                <li>Location and date information</li>
+                <li>Summary statistics (total gaps by classification)</li>
+                <li>Complete gap measurement details</li>
+                <li>Developer and contact information</li>
+              </ul>
+            </li>
+            <li>Choose your print destination:
+              <ul>
+                <li><strong>Physical Printer:</strong> Print to paper for field reports</li>
+                <li><strong>Save as PDF:</strong> Create digital copies for archival or sharing</li>
+              </ul>
+            </li>
+          </ol>
+        </ul>
+        <div class="tip-box">
+          <strong>💡 Tip:</strong> The print layout is optimized for A4 paper and includes page breaks to keep records together. Unnecessary interface elements (buttons, menus) are automatically hidden when printing.
+        </div>
         </section>
       </div>
     </div>

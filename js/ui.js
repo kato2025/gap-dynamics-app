@@ -844,3 +844,114 @@ function calculateEditSquareArea() {
     areaInput.style.borderColor = "#e0e0e0";
   }, 2000);
 }
+
+/**
+ * Print results
+ */
+function printResults() {
+  document.getElementById("dropdownMenu").classList.remove("show");
+  
+  if (results.length === 0) {
+    alert("No results to print. Please add some gap measurements first.");
+    return;
+  }
+  
+  // Update print header
+  const printLocation = document.getElementById("printLocation");
+  const printDate = document.getElementById("printDate");
+  const printTimestamp = document.getElementById("printTimestamp");
+  
+  if (printLocation) {
+    printLocation.textContent = currentLocation ? `Location: ${currentLocation}` : "Location: Not specified";
+  }
+  
+  if (printDate) {
+    const now = new Date();
+    printDate.textContent = `Report generated: ${now.toLocaleDateString()} ${now.toLocaleTimeString()}`;
+  }
+  
+  if (printTimestamp) {
+    const now = new Date();
+    printTimestamp.textContent = `${now.toLocaleDateString()} at ${now.toLocaleTimeString()}`;
+  }
+  
+  // Calculate summary statistics
+  let smallCount = 0;
+  let mediumCount = 0;
+  let largeCount = 0;
+  
+  results.forEach(r => {
+    if (r.classification === "Small gap") smallCount++;
+    else if (r.classification === "Medium gap") mediumCount++;
+    else if (r.classification === "Large gap") largeCount++;
+  });
+  
+  // Update summary table
+  document.getElementById("printTotalGaps").textContent = results.length;
+  document.getElementById("printSmallGaps").textContent = smallCount;
+  document.getElementById("printMediumGaps").textContent = mediumCount;
+  document.getElementById("printLargeGaps").textContent = largeCount;
+  
+  // Create print table
+  createPrintTable();
+  
+  // Trigger print dialog
+  setTimeout(() => {
+    window.print();
+  }, 100);
+}
+
+/**
+ * Create print table from results
+ */
+function createPrintTable() {
+  const container = document.getElementById("resultsContainer");
+  
+  // Create table element
+  let tableHTML = `
+    <table class="print-table" style="display: none;">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Plot</th>
+          <th>Gap</th>
+          <th>Species Involved</th>
+          <th>Causal Factor(s)</th>
+          <th>Method</th>
+          <th>Gap Size (m²)</th>
+          <th>Brokaw's Classification</th>
+        </tr>
+      </thead>
+      <tbody>
+  `;
+  
+  // Add data rows
+  results.forEach(r => {
+    tableHTML += `
+      <tr>
+        <td>${r.id}</td>
+        <td>${r.plotNumber}</td>
+        <td>${r.gapNumber}</td>
+        <td>${r.speciesInvolved || 'N/A'}</td>
+        <td>${r.causalFactor}</td>
+        <td>${r.method}</td>
+        <td>${r.area.toFixed(2)}</td>
+        <td>${r.classification}</td>
+      </tr>
+    `;
+  });
+  
+  tableHTML += `
+      </tbody>
+    </table>
+  `;
+  
+  // Check if print table already exists, if so remove it
+  const existingTable = container.querySelector('.print-table');
+  if (existingTable) {
+    existingTable.remove();
+  }
+  
+  // Append new table to container
+  container.insertAdjacentHTML('beforeend', tableHTML);
+}
