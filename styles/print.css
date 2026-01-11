@@ -19,7 +19,7 @@
   /* Reset body for print */
   body {
     background: white !important;
-    padding: 15mm 20mm !important;
+    padding: 5mm 5mm !important;
     color: black !important;
     min-height: auto !important;
   }
