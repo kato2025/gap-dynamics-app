@@ -32,7 +32,9 @@
     </div>
    <!-- Dropdown Menu -->
     <div id="dropdownMenu" class="dropdown-menu">
+      <button onclick="exportCSV()">📥 Exporting Data</button>
       <button onclick="openCSVFile()">📂 Open CSV File</button>
+      <button onclick="showNewLocationModal()">🆕 New Location</button>
       <button onclick="showUserGuide()">📖 User Guide</button>
       <button onclick="showAboutDeveloper()">👨‍💻 About Developer</button>
       <button onclick="printResults()">🖨️ Print Results</button>
@@ -453,9 +455,15 @@
 
         <section class="guide-section">
         <h4>📥 Exporting Data</h4>
-        <p>Click <strong>📥 Export to CSV</strong> to download all results in a spreadsheet format. The file will be named after your location.</p>
+        <p>To export your data to a CSV file:</p>
+          <ul>
+            <li>Click the menu button (⋮) in the top-right corner and choose 📥Export to CSV or</li>
+            <li>Click <strong>📥 Export to CSV</strong> to download all results in a spreadsheet format compatible with TIAMA/SIGIF2 and Excel.</li>
+            <li>The file wil be saved in your Downloads folder</li>
+          </ul>
         <p>Exported files can be:</p>
         <ul>
+          <li>Opened and edited in the Bap Management App</li>
           <li>Opened and edited in Excel, Google Sheets, or any spreadsheet application</li>
           <li>Saved as backup copies of your data</li>
           <li>Shared with colleagues or supervisors</li>
@@ -497,7 +505,11 @@
 
         <section class="guide-section">
           <h4>🆕 Starting a New Location</h4>
-          <p>Click <strong>🆕 New Location</strong> to start fresh. You'll be prompted to export existing data first if you haven't already.</p>
+          <p>To start a new inventory in a new area</p>
+          <ul>
+            <li>Click the menu button (⋮) in the top-right corner and choose 🆕 New Inventory or</li>
+            <li>Click <strong>🆕 New Inventory</strong> to start fresh. You'll be prompted to export existing data first if you haven't already.</li>
+          </ul>
         </section>
 
         <section class="guide-section">

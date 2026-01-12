@@ -151,6 +151,12 @@ function checkRequiredFields() {
  * Export results to CSV
  */
 function exportCSV() {
+  // Close menu after clicking
+  const menu = document.getElementById("dropdownMenu");
+  if (menu) {
+    menu.classList.remove("show");
+  }
+
   if (results.length === 0) return;
   
   // Create CSV content with center-aligned ID column hint
@@ -175,6 +181,12 @@ function exportCSV() {
  * Show new location modal
  */
 function showNewLocationModal() {
+  // Close menu after clicking
+  const menu = document.getElementById("dropdownMenu");
+  if (menu) {
+    menu.classList.remove("show");
+  }
+
   if (results.length === 0) {
     clearAllData();
     return;
